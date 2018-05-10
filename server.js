@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const dbPromise = require('./db')
 const api = require('./api')
+const logger = require('./logger')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -12,7 +13,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/callback', (req, res) => {
-  console.log(req.query)
+  logger.info(`call from twitch to subscribe ${req.query}`)
   res.send(req.query['hub.challenge'])
 })
 
@@ -24,7 +25,7 @@ app.post('/callback', async (req, res) => {
   }))
 
   await api.saveUser(userToSave[0])
-  console.log(userToSave[0])
+  logger.log(`Saving user to database Followers table ${userToSave[0]}`)
   res.send(req.body)
 })
 
@@ -40,6 +41,6 @@ app.get('/defectors', async (req, res) => {
   res.json(await api.getDefectors())
 })
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+app.listen(3000, () => logger.log('DefectorBot listening on port 3000!'))
 
 module.exports = app

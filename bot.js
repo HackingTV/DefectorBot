@@ -1,19 +1,31 @@
 
 const api = require('./api')
 const TwitchBot = require('twitch-bot')
+const logger = require('./logger')
+
+const channel = 'hackingtv'
 
 const Bot = new TwitchBot({
   username: 'defectorbot',
   oauth: process.env.OAUTH_TOKEN,
-  channels: ['hackingtv']
+  channels: [channel]
 })
 
 Bot.on('join', channel => {
-  console.log(`Joined channel: ${channel}`)
+  logger.info(`Joined channel: ${channel}`)
 })
 
 Bot.on('error', err => {
-  console.log(err)
+  logger.error('something happened to the bot in twitch', err)
+})
+
+Bot.on('part', channel => {
+  logger.info(`leaving the channel ${channel}`)
+  Bot.join(channel)
+})
+
+Bot.on('join', channel => {
+  logger.info(`joining the channel ${channel}`)
 })
 
 Bot.on('message', async chatter => {
