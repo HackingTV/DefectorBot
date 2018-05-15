@@ -26,17 +26,21 @@ app.get('/follower/callback', (req, res) => {
 })
 
 app.post('/follower/callback', async (req, res) => {
-  await api.followerFlash()
-
   let userData = await api.getUsernamesForIds([req.body.data[0].from_id])
   let userToSave = userData.map(user => ({
     id: user.id,
     username: user.display_name
   }))
 
-  await api.saveUser(userToSave[0])
-  logger.log(`Saving user to database Followers table ${userToSave[0]}`)
-  res.send(req.body)
+  try {
+    await api.saveUser(userToSave[0])
+    await api.followerFlash()
+    logger.log(`Saving user to database Followers table ${userToSave[0]}`)
+    res.send(req.body)
+  } catch (err) {
+    logger.error(err)
+    res.sendStatus(500)
+  }
 })
 
 app.get('/followers', async (req, res) => {
@@ -48,7 +52,7 @@ app.get('/newFollowers', async (req, res) => {
 })
 
 app.get('/defectors', async (req, res) => {
-  res.json(await api.getDefectors())
+  res.json((await api.getDefectors()).map(defector => defector.username))
 })
 
 app.listen(3000, () => logger.log('DefectorBot listening on port 3000!'))

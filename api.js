@@ -1,7 +1,5 @@
 const axios = require('axios')
 const dbPromise = require('./db')
-const includes = require('array-includes')
-const flatten = require('array-flatten')
 
 const myTwitchID = process.env.TWITCH_ID
 
@@ -87,24 +85,16 @@ const getDefectors = async () => {
   const db = await dbPromise
 
   // get followers from database
-  let dbFollowers = await db.all('SELECT id FROM users')
+  let dbFollowers = await db.all('SELECT * FROM users')
 
   // Get followers from twitch
-  let twitchFollowers = await getUsersFromFollowers()
-  twitchFollowers = twitchFollowers.map(follower => follower.id)
-  // twitchFollowers.splice(0, 2);
+  let followers = await getUsersFromFollowers()
 
-  // defectors are users in database and who are not in twitch
-  let unfollowers = dbFollowers
-    .map(follower => follower.id.toString())
-    .filter(followerId => !includes(twitchFollowers, followerId))
-    .map(async id => {
-      return await getUsernamesForIds(id)
+  // return the diff between both
+  return dbFollowers
+    .filter(dbFollower => {
+      return !followers.some(follower => follower.id === dbFollower.id.toString())
     })
-
-  return Promise.all(unfollowers)
-    .then(res => flatten(res))
-    .then(res => res.map(obj => obj.display_name))
 }
 
 module.exports = {
