@@ -36,6 +36,14 @@ const getFollowers = (cursor) => {
   .catch(err => console.log(err))
 }
 
+const subscriberFlash = () => {
+  return axios.get(process.env.LIGHT_API + '/subscriber')
+}
+
+const followerFlash = () => {
+  return axios.get(process.env.LIGHT_API + '/follower')
+}
+
 const getUsersFromFollowers = async (cursor) => {
   let followers = await getFollowers(cursor)
 
@@ -100,6 +108,8 @@ const getDefectors = async () => {
 }
 
 module.exports = {
+  subscriberFlash,
+  followerFlash,
   subscribeToFollowerHook,
   getFollowers,
   getUsersFromFollowers,

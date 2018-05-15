@@ -12,12 +12,22 @@ app.get('/', (req, res) => {
   res.send('go away')
 })
 
-app.get('/callback', (req, res) => {
+// app.get('/subscriber/callback', (req, res) => {
+
+// })
+
+// app.post('/subscriber/callback', (req, res) => {
+
+// })
+
+app.get('/follower/callback', (req, res) => {
   logger.info(`call from twitch to subscribe ${req.query}`)
   res.send(req.query['hub.challenge'])
 })
 
-app.post('/callback', async (req, res) => {
+app.post('/follower/callback', async (req, res) => {
+  await api.followerFlash()
+
   let userData = await api.getUsernamesForIds([req.body.data[0].from_id])
   let userToSave = userData.map(user => ({
     id: user.id,

@@ -1,5 +1,4 @@
 require('dotenv').config()
-const bot = require('./bot')
 const server = require('./server')
 const CronJob = require('cron').CronJob;
 const api = require('./api')
@@ -31,4 +30,4 @@ const cronJobFunc = async () => {
 
 const job = new CronJob('00 00 23 * * *', cronJobFunc, () => logger.error('cron job failed'), true, 'America/Toronto')
 
-// init()
+init()
