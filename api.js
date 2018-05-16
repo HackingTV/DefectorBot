@@ -1,5 +1,6 @@
 const axios = require('axios')
 const dbPromise = require('./db')
+const logger = require('./logger')
 
 const myTwitchID = process.env.TWITCH_ID
 
@@ -86,7 +87,8 @@ const saveUser = async (user) => {
 
 const saveDefector = async (user) => {
   const db = await dbPromise
-  return await db.exec(`INSERT INTO defectors VALUES ("${user.id}","${user.display_name}", UTC_TIMESTAMP()`)
+  logger.info('saving user', user)
+  return await db.exec(`INSERT INTO defectors VALUES ("${user.id}","${user.username}", DATETIME())`)
 }
 
 const getFollowersInDatabase = async () => {
@@ -120,5 +122,6 @@ module.exports = {
   getUsernamesForIds,
   getFollowersInDatabase,
   saveUser,
+  saveDefector,
   getDefectors
 }
