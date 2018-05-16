@@ -7,7 +7,20 @@ const subscribeToFollowerHook = async () => {
   return axios.post('https://api.twitch.tv/helix/webhooks/hub', {
       "hub.mode": "subscribe",
       "hub.topic": `https://api.twitch.tv/helix/users/follows?first=1&to_id=${myTwitchID}`,
-      "hub.callback": "https://www.whentokens.com/callback",
+      "hub.callback": "https://www.whentokens.com/follower/callback",
+      "hub.lease_seconds": 864000
+    },{
+    headers: {
+      'Client-ID': process.env.CLIENT_ID
+    }
+  })
+}
+
+const subscribeToStreamUpDownHook = async () => {
+  return axios.post('https://api.twitch.tv/helix/webhooks/hub', {
+      "hub.mode": "subscribe",
+      "hub.topic": `https://api.twitch.tv/helix/streams?user_id=${myTwitchID}`,
+      "hub.callback": "https://www.whentokens.com/updown/callback",
       "hub.lease_seconds": 864000
     },{
     headers: {
@@ -101,6 +114,7 @@ module.exports = {
   subscriberFlash,
   followerFlash,
   subscribeToFollowerHook,
+  subscribeToStreamUpDownHook,
   getFollowers,
   getUsersFromFollowers,
   getUsernamesForIds,

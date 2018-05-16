@@ -3,6 +3,7 @@ const server = require('./server')
 const CronJob = require('cron').CronJob;
 const api = require('./api')
 const logger = require('./logger')
+const twitchBot = require('./bots/twitchbot')
 
 const updateDatabase = async () => {
   let followers = await api.getUsersFromFollowers()
@@ -18,12 +19,17 @@ const updateDatabase = async () => {
 }
 
 const init = async () => (
-  await Promise.all([api.subscribeToFollowerHook(), updateDatabase()])
+  await Promise.all([
+    api.subscribeToFollowerHook(),
+    api.subscribeToStreamUpDownHook(),
+    updateDatabase()
+  ])
 )
 
+// TODO: Fix Defector saving
 const cronJobFunc = async () => {
   logger.info('cronjob is running')
-  let defectors = await api.getDefectors
+  let defectors = await api.getDefectors()
   defectors.map(defector => api.saveDefector(defector))
   await init()
 }

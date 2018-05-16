@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const dbPromise = require('./db')
 const api = require('./api')
 const logger = require('./logger')
+const discordBot = require('./bots/discordbot')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -12,16 +13,20 @@ app.get('/', (req, res) => {
   res.send('go away')
 })
 
-// app.get('/subscriber/callback', (req, res) => {
+app.get('/updown/callback', (req, res) => {
+  logger.info(`call from twitch to subscribe ${req.query.topic}`)
+  res.send(req.query['hub.challenge'])
+})
 
-// })
-
-// app.post('/subscriber/callback', (req, res) => {
-
-// })
+app.post('/updown/callback', (req, res) => {
+  if (data.length) {
+    discordBot.announcement(`${req.body.data[0].title} https://www.twitch.tv/hackingtv`)
+  }
+  res.send(req.body)
+})
 
 app.get('/follower/callback', (req, res) => {
-  logger.info(`call from twitch to subscribe ${req.query}`)
+  logger.info(`call from twitch to subscribe ${req.query.topic}`)
   res.send(req.query['hub.challenge'])
 })
 
@@ -55,6 +60,6 @@ app.get('/defectors', async (req, res) => {
   res.json((await api.getDefectors()).map(defector => defector.username))
 })
 
-app.listen(3000, () => logger.log('DefectorBot listening on port 3000!'))
+app.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
 
 module.exports = app
