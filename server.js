@@ -14,19 +14,20 @@ app.get('/', (req, res) => {
 })
 
 app.get('/updown/callback', (req, res) => {
-  logger.info(`call from twitch to subscribe ${req.query.topic}`)
+  logger.info(`call from twitch to subscribe ${req.query}`)
   res.send(req.query['hub.challenge'])
 })
 
 app.post('/updown/callback', (req, res) => {
-  if (data.length) {
+  logger.info('call about stream stuff', req.body)
+  if (req.body.data.length) {
     discordBot.announcement(`${req.body.data[0].title} https://www.twitch.tv/hackingtv`)
   }
   res.send(req.body)
 })
 
 app.get('/follower/callback', (req, res) => {
-  logger.info(`call from twitch to subscribe ${req.query.topic}`)
+  logger.info(`call from twitch to subscribe ${req.query}`)
   res.send(req.query['hub.challenge'])
 })
 
