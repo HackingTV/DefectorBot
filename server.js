@@ -41,7 +41,7 @@ app.post('/follower/callback', async (req, res) => {
   try {
     await api.saveUser(userToSave[0])
     await api.followerFlash()
-    logger.log(`Saving user to database Followers table ${userToSave[0]}`)
+    logger.info(`Saving user to database Followers table ${userToSave[0]}`)
     res.send(req.body)
   } catch (err) {
     logger.error(err)

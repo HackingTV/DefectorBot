@@ -34,7 +34,7 @@ Bot.on('join', channel => {
 
 Bot.on('subscription', async event => {
   logger.info('subscription detected, firing lights', event)
-  await axios.get(process.env.LIGHT_API + '/subscriber')
+  await api.subscriberFlash()
 })
 
 Bot.on('message', async chatter => {
