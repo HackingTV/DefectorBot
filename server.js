@@ -20,7 +20,7 @@ app.get('/updown/callback', (req, res) => {
 app.post('/updown/callback', (req, res) => {
   logger.info(`call about stream stuff ${JSON.stringify(req.body)}`)
   if (req.body.data.length) {
-    discordBot.announcement(`${req.body.data[0].title} https://www.twitch.tv/hackingtv`)
+    discordBot.announcement(`@here ${req.body.data[0].title} https://www.twitch.tv/hackingtv`)
   }
   res.send(req.body)
 })
@@ -62,6 +62,6 @@ app.get('/defectors', async (req, res) => {
   res.json(await api.getDefectors())
 })
 
-app.listen(process.env.PORT || 3001, () => logger.log('DefectorBot listening on port 3000!'))
+app.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
 
 module.exports = app

@@ -9,8 +9,12 @@ client.on('ready', () => {
 client.on('message', async msg => {
   if (msg.content === '!defectors') {
     try {
-      let defectors = await api.getDefectors()
-      msg.reply(`The Defectors: ${defectors.map(defector => defector.username)}`)
+      let defectors = await api.getDefectorsFromDB()
+      if (defectors.length) {
+        msg.reply(`The Defectors: ${defectors.map(defector => defector.username)}`)
+      } else {
+        msg.reply('No Defectors this week! :POGGERS:')
+      }
     } catch (err) {
       console.log('error is ',err)
     }
