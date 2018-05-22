@@ -1,52 +1,51 @@
-const TwitchBot = require('twitch-bot')
+const tmi = require('tmi.js')
 const api = require('../api')
 const logger = require('../logger')
 
 const channel = 'hackingtv'
 
-const Bot = new TwitchBot({
-  username: 'defectorbot',
-  oauth: process.env.OAUTH_TOKEN,
-  channels: [channel]
-})
+const options = {
+    options: {
+        debug: true
+    },
+    connection: {
+        reconnect: true
+    },
+    identity: {
+        username: 'defectorbot',
+        password: process.env.OAUTH_TOKEN
+    },
+    channels: [channel]
+}
 
-Bot.on('join', channel => {
-  logger.info(`Joined channel: ${channel}`)
-})
+const client = new tmi.client(options)
 
-Bot.on('error', err => {
-  logger.error('something happened to the bot in twitch', err)
-})
+// Connect the client to the server..
+client.connect()
 
-Bot.on('part', channel => {
-  logger.info(`leaving the channel ${channel}`)
-  Bot.join(channel)
-})
-
-Bot.on('timeout', event => {
-  logger.info('timed out bro', event)
-  Bot.join(channel)
-})
-
-Bot.on('join', channel => {
-  logger.info(`joining the channel ${channel}`)
-})
-
-Bot.on('subscription', async event => {
-  logger.info('subscription detected, firing lights', event)
+client.on('subscription', async (channel, username, method, message, userstate) => {
+  console.log(`subscription detected, firing lights ${username}`)
+  logger.info(`subscription detected, firing lights ${username}`)
   await api.subscriberFlash()
 })
 
-Bot.on('message', async chatter => {
-  if(chatter.message === '!defectors') {
+client.on('cheer', async (channel, userstate, message) => {
+  await api.cheerFlash(userstate.bits)
+})
+
+client.on('chat', async (channel, userstate, message, self) => {
+  // Don't listen to my own messages..
+  if (self) return
+
+  if(message === '!defectors') {
     try {
       let defectors = await api.getDefectors()
-      Bot.say(`The Defectors: ${defectors.map(defector => defector.username)}`)
+      await client.say(channel, `The Defectors: ${defectors.map(defector => defector.username)}`)
     } catch(err) {
       console.error(err)
       logger.error(err)
     }
-  } else if (chatter.message === '!help') {
-    Bot.say('Use !defectors to list the defectors')
+  } else if (message === '!help') {
+    await client.say(channel, 'Use !defectors to list the defectors')
   }
 })

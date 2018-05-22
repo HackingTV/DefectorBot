@@ -1,6 +1,6 @@
 require('dotenv').config()
-const server = require('./server')
 const CronJob = require('cron').CronJob;
+const server = require('./server') // Need this to start express
 const api = require('./api')
 const logger = require('./logger')
 const twitchBot = require('./bots/twitchbot')
@@ -13,7 +13,7 @@ const updateDatabase = async () => {
     username: user.display_name
   }))
 
-  let result = users.map(user => api.saveUser(user))
+  users.map(user => api.saveUser(user))
 
   return true
 }
@@ -34,6 +34,6 @@ const cronJobFunc = async () => {
   await init()
 }
 
-const job = new CronJob('00 00 23 * * *', cronJobFunc, () => logger.error('cron job failed'), true, 'America/Toronto')
+new CronJob('00 00 23 * * *', cronJobFunc, () => logger.error('cron job failed'), true, 'America/Toronto')
 
 init()

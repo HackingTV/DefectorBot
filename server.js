@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
-const dbPromise = require('./db')
 const api = require('./api')
 const logger = require('./logger')
 const discordBot = require('./bots/discordbot')
@@ -14,12 +13,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/updown/callback', (req, res) => {
-  logger.info(`call from twitch to subscribe ${req.query}`)
+  logger.info(`call from twitch to subscribe ${JSON.stringify(req.query)}`)
   res.send(req.query['hub.challenge'])
 })
 
 app.post('/updown/callback', (req, res) => {
-  logger.info('call about stream stuff', req.body)
+  logger.info(`call about stream stuff ${JSON.stringify(req.body)}`)
   if (req.body.data.length) {
     discordBot.announcement(`${req.body.data[0].title} https://www.twitch.tv/hackingtv`)
   }
@@ -27,7 +26,8 @@ app.post('/updown/callback', (req, res) => {
 })
 
 app.get('/follower/callback', (req, res) => {
-  logger.info(`call from twitch to subscribe ${req.query}`)
+  //logger.info(`call from twitch to subscribe ${JSON.stringify(req.query)}`)
+  console.log(req.query)
   res.send(req.query['hub.challenge'])
 })
 
@@ -41,9 +41,10 @@ app.post('/follower/callback', async (req, res) => {
   try {
     await api.saveUser(userToSave[0])
     await api.followerFlash()
-    logger.info(`Saving user to database Followers table ${userToSave[0]}`)
+    logger.info(`Saving user to database Followers table ${JSON.stringify(userToSave[0])}`)
     res.send(req.body)
   } catch (err) {
+    console.log(err)
     logger.error(err)
     res.sendStatus(500)
   }
