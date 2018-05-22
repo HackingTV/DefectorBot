@@ -59,9 +59,9 @@ app.get('/newFollowers', async (req, res) => {
 })
 
 app.get('/defectors', async (req, res) => {
-  res.json((await api.getDefectors()).map(defector => defector.username))
+  res.json(await api.getDefectors())
 })
 
-app.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
+app.listen(process.env.PORT || 3001, () => logger.log('DefectorBot listening on port 3000!'))
 
 module.exports = app

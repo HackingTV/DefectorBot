@@ -5,9 +5,6 @@ const logger = require('../logger')
 const channel = 'hackingtv'
 
 const options = {
-    options: {
-        debug: true
-    },
     connection: {
         reconnect: true
     },
@@ -39,8 +36,12 @@ client.on('chat', async (channel, userstate, message, self) => {
 
   if(message === '!defectors') {
     try {
-      let defectors = await api.getDefectors()
-      await client.say(channel, `The Defectors: ${defectors.map(defector => defector.username)}`)
+      let defectors = await api.getDefectorsFromDB()
+      if (defectors.length) {
+        await client.say(channel, `The Defectors: ${defectors.map(defector => defector.username)}`)
+      } else {
+        await client.say(channel, 'No Defectors this week! POGGERS')
+      }
     } catch(err) {
       console.error(err)
       logger.error(err)

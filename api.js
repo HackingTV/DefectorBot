@@ -1,6 +1,7 @@
 const axios = require('axios')
 const dbPromise = require('./db')
 const logger = require('./logger')
+const moment = require('moment')
 
 const myTwitchID = process.env.TWITCH_ID
 
@@ -116,6 +117,16 @@ const getDefectors = async () => {
     })
 }
 
+const getDefectorsFromDB = async() => {
+  const db = await dbPromise
+
+  let weekStart = await moment().startOf('week').format("YYYY-MM-DD HH:mm:ss")
+
+  return await db.all(
+    `SELECT * FROM defectors WHERE unfollowed_at > "${weekStart}"`
+  )
+}
+
 module.exports = {
   cheerFlash,
   subscriberFlash,
@@ -126,7 +137,8 @@ module.exports = {
   getUsersFromFollowers,
   getUsernamesForIds,
   getFollowersInDatabase,
+  getDefectorsFromDB,
+  getDefectors,
   saveUser,
   saveDefector,
-  getDefectors
 }
