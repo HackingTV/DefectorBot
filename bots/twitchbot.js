@@ -1,4 +1,4 @@
-const tmi = require('tmi.js')
+const tmi = require('twitch-js')
 const api = require('../api')
 const logger = require('../logger')
 
@@ -21,6 +21,12 @@ const client = new tmi.client(options)
 client.connect()
 
 client.on('subscription', async (channel, username, method, message, userstate) => {
+  console.log(`subscription detected, firing lights ${username}`)
+  logger.info(`subscription detected, firing lights ${username}`)
+  await api.subscriberFlash()
+})
+
+client.on('subgift', async (channel, username, recipient, method, userstate) => {
   console.log(`subscription detected, firing lights ${username}`)
   logger.info(`subscription detected, firing lights ${username}`)
   await api.subscriberFlash()
