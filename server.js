@@ -1,9 +1,11 @@
-const express = require('express')
-const app = express()
+const app = require('express')()
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 const bodyParser = require('body-parser')
 const api = require('./api')
 const logger = require('./logger')
 const discordBot = require('./bots/discordbot')
+const path = require('path')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -39,8 +41,11 @@ app.post('/follower/callback', async (req, res) => {
 
   try {
     await api.saveUser(userToSave[0])
-    await api.followerFlash()
     logger.info(`Saving user to database Followers table ${JSON.stringify(userToSave[0])}`)
+    await api.followerFlash()
+    logger.info('fired lights!')
+    io.emit('follow', req.params.name)
+    logger.info('fired widget!')
     res.send(req.body)
   } catch (err) {
     console.log(err)
@@ -61,6 +66,10 @@ app.get('/defectors', async (req, res) => {
   res.json(await api.getDefectors())
 })
 
-app.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
+app.get('/widgets/follow', (req, res) => {
+  res.sendFile(path.join(__dirname, './widgets/follow', 'index.html'))
+})
+
+http.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
 
 module.exports = app
