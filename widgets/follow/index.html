@@ -4,18 +4,20 @@
 <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet">
 
 <style>
-  html {
+  body {
     font-family: 'Anonymous Pro', monospace;
     font-size:30px;
+    display:flex;
+    justify-content:center;
+    align-items:center
   }
 </style>
 
 <script>
   $(function () {
     var socket = io();
-
     socket.on('follow', function(username) {
-      $('#alert').text(`${username} has followed!`)
+      $('#alert').text(username + ' has followed!')
       $('#alert').show().delay(5000).hide(0)
     });
   });
