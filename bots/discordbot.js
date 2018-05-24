@@ -13,7 +13,7 @@ client.on('message', async msg => {
       if (defectors.length) {
         msg.reply(`The Defectors: ${defectors.map(defector => defector.username)}`)
       } else {
-        msg.reply('No Defectors this week! :POGGERS:')
+        msg.reply('No Defectors this week!')
       }
     } catch (err) {
       console.log('error is ',err)

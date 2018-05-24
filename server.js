@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/updown/callback', (req, res) => {
-  logger.info(`call from twitch to subscribe ${JSON.stringify(req.query)}`)
+  logger.info(`Subscribing to Stream Up/Down Webhook ${JSON.stringify(req.query)}`)
   res.send(req.query['hub.challenge'])
 })
 
@@ -26,8 +26,7 @@ app.post('/updown/callback', (req, res) => {
 })
 
 app.get('/follower/callback', (req, res) => {
-  //logger.info(`call from twitch to subscribe ${JSON.stringify(req.query)}`)
-  console.log(req.query)
+  logger.info(`Subscribing to Follower Webhook ${JSON.stringify(req.query)}`)
   res.send(req.query['hub.challenge'])
 })
 

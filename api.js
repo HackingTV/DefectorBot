@@ -92,7 +92,7 @@ const saveUser = async (user) => {
 
 const saveDefector = async (user) => {
   const db = await dbPromise
-  logger.info('saving user', user)
+  logger.info('saving defector', user)
   return await db.exec(`INSERT INTO defectors VALUES ("${user.id}","${user.username}", DATETIME())`)
 }
 

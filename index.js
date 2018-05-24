@@ -26,7 +26,6 @@ const init = async () => (
   ])
 )
 
-// TODO: Fix Defector saving
 const cronJobFunc = async () => {
   logger.info('cronjob is running')
   let defectors = await api.getDefectors()
