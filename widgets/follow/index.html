@@ -1,0 +1,29 @@
+<html>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet">
+
+<style>
+  html {
+    font-family: 'Anonymous Pro', monospace;
+    font-size:30px;
+  }
+</style>
+
+<script>
+  $(function () {
+    var socket = io();
+
+    socket.on('follow', function(username) {
+      $('#alert').text(`${username} has followed!`)
+      $('#alert').show().delay(5000).hide(0)
+    });
+  });
+</script>
+
+<body>
+
+<div id="alert" style="display:none;"></div>
+
+</body>
+</html>
