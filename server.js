@@ -1,4 +1,5 @@
-const app = require('express')()
+const express = require('express')
+const app = express()
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const bodyParser = require('body-parser')
@@ -9,6 +10,7 @@ const path = require('path')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use('/static', express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req, res) => {
   res.send('go away')
@@ -44,7 +46,7 @@ app.post('/follower/callback', async (req, res) => {
     logger.info(`Saving user to database Followers table ${JSON.stringify(userToSave[0])}`)
     await api.followerFlash()
     logger.info('fired lights!')
-    io.emit('follow', req.params.name)
+    io.emit('follow', userToSave[0].username)
     logger.info('fired widget!')
     res.send(req.body)
   } catch (err) {
