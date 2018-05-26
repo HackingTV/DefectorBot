@@ -84,4 +84,7 @@ app.get('/widgets/alert', (req, res) => {
 
 http.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
 
-module.exports = app
+module.exports = {
+  app,
+  io
+}

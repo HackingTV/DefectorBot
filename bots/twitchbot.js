@@ -1,6 +1,7 @@
 const tmi = require('twitch-js')
 const api = require('../api')
 const logger = require('../logger')
+const io = require('../server').io
 
 const channel = 'hackingtv'
 
@@ -16,21 +17,20 @@ const options = {
 }
 
 const client = new tmi.client(options)
+console.log(io)
+const handleSubscription = async (channel, username, method, message, userstate) => {
+  console.log(`subscription detected, firing lights ${username}`)
+  logger.info(`subscription detected, firing lights ${username}`)
+  await api.subscriberFlash()
+  io.emit('subscribe', username)
+}
 
 // Connect the client to the server..
 client.connect()
 
-client.on('subscription', async (channel, username, method, message, userstate) => {
-  console.log(`subscription detected, firing lights ${username}`)
-  logger.info(`subscription detected, firing lights ${username}`)
-  await api.subscriberFlash()
-})
+client.on('subscription', handleSubscription)
 
-client.on('subgift', async (channel, username, recipient, method, userstate) => {
-  console.log(`subscription detected, firing lights ${username}`)
-  logger.info(`subscription detected, firing lights ${username}`)
-  await api.subscriberFlash()
-})
+client.on('subgift', handleSubscription)
 
 client.on('cheer', async (channel, userstate, message) => {
   await api.cheerFlash(userstate.bits)

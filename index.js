@@ -35,4 +35,4 @@ const cronJobFunc = async () => {
 
 new CronJob('00 00 23 * * *', cronJobFunc, () => logger.error('cron job failed'), true, 'America/Toronto')
 
-init()
+//init()
