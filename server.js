@@ -68,8 +68,13 @@ app.get('/defectors', async (req, res) => {
   res.json(await api.getDefectors())
 })
 
-app.get('/test/:name', (req, res) => {
+app.get('/testFollow/:name', (req, res) => {
   io.emit('follow', req.params.name)
+  res.sendStatus(200)
+})
+
+app.get('/testSubscribe/:name', (req, res) => {
+  io.emit('subscribe', req.params.name)
   res.sendStatus(200)
 })
 
@@ -77,6 +82,10 @@ app.get('/widgets/follow', (req, res) => {
   res.sendFile(path.join(__dirname, './widgets/follow', 'index.html'))
 })
 
-http.listen(process.env.PORT || 3000, () => logger.log('DefectorBot listening on port 3000!'))
+app.get('/widgets/subscribe', (req, res) => {
+  res.sendFile(path.join(__dirname, './widgets/subscribe', 'index.html'))
+})
+
+http.listen(process.env.PORT || 3001, () => logger.log('DefectorBot listening on port 3000!'))
 
 module.exports = app
