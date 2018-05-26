@@ -12,14 +12,14 @@
   });
 
   var handleSubscribe = function(username) {
-      var audio = $('subscriber-audio')[0];
+      var audio = $('#subscriber-audio')[0];
       audio.play();
       $('div#subscriber-alert h1').text(username + ' has subscribed!')
       $('div#subscriber-alert').show().delay(8000).hide(0)
   }
 
   var handleFollow = function(username) {
-      var audio = $('follower-audio')[0];
+      var audio = $('#follower-audio')[0];
       audio.play();
       $('div#follower-alert h1').text(username + ' has followed!')
       $('div#follower-alert').show().delay(8000).hide(0)
