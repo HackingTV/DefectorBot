@@ -78,12 +78,8 @@ app.get('/testSubscribe/:name', (req, res) => {
   res.sendStatus(200)
 })
 
-app.get('/widgets/follow', (req, res) => {
-  res.sendFile(path.join(__dirname, './widgets/follow', 'index.html'))
-})
-
-app.get('/widgets/subscribe', (req, res) => {
-  res.sendFile(path.join(__dirname, './widgets/subscribe', 'index.html'))
+app.get('/widgets/alert', (req, res) => {
+  res.sendFile(path.join(__dirname, './widgets/alert', 'index.html'))
 })
 
 http.listen(process.env.PORT || 3001, () => logger.log('DefectorBot listening on port 3000!'))
