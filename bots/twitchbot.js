@@ -2,6 +2,7 @@ const tmi = require('twitch-js')
 const api = require('../api')
 const logger = require('../logger')
 const io = require('../server').io
+const trivia = require('../trivia')
 
 const channel = 'hackingtv'
 
@@ -17,7 +18,7 @@ const options = {
 }
 
 const client = new tmi.client(options)
-console.log(io)
+
 const handleSubscription = async (channel, username, method, message, userstate) => {
   console.log(`subscription detected, firing lights ${username}`)
   logger.info(`subscription detected, firing lights ${username}`)
@@ -40,6 +41,12 @@ client.on('chat', async (channel, userstate, message, self) => {
   // Don't listen to my own messages..
   if (self) return
 
+  if (trivia.isPlaying()) {
+    if (trivia.isAnswer(message)) {
+      await client.say(channel, 'CORRECT!')
+    }
+  }
+
   if(message === '!defectors') {
     try {
       let defectors = await api.getDefectorsFromDB()
@@ -52,6 +59,10 @@ client.on('chat', async (channel, userstate, message, self) => {
       console.error(err)
       logger.error(err)
     }
+  } else if (message === '!trivia' && !trivia.isPlaying()) {
+    //return client.say(channel, 'Starting a game of trivia!')
+    let question = await trivia.getQuestion()
+    await client.say(channel, question)
   } else if (message === '!help') {
     await client.say(channel, 'Use !defectors to list the defectors')
   }
