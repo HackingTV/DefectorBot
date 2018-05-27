@@ -48,8 +48,6 @@ client.on('chat', async (channel, userstate, message, self) => {
       await client.say(channel, 'CORRECT!')
       await api.triviaFlash()
     }
-  } else {
-    await client.say(channel, 'A game of trivia is already in progress.')
   }
 
   if(message === '!defectors') {
@@ -64,8 +62,11 @@ client.on('chat', async (channel, userstate, message, self) => {
       console.error(err)
       logger.error(err)
     }
-  } else if (message === '!trivia' && !trivia.isPlaying()) {
-    //return client.say(channel, 'Starting a game of trivia!')
+  } else if (message === '!trivia') {
+    if (trivia.isPlaying()) {
+      return await client.say(channel, 'A game of trivia is already in progress.')
+    }
+    
     let question = await trivia.getQuestion()
     await client.say(channel, question)
   } else if (message === '!discord') {
