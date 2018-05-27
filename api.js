@@ -61,6 +61,10 @@ const cheerFlash = amount => {
   return axios.get(`${process.env.LIGHT_API}/cheer/${amount}`)
 }
 
+const triviaFlash = amount => {
+  return axios.get(`${process.env.LIGHT_API}/trivia`)
+}
+
 const getUsersFromFollowers = async (cursor) => {
   let followers = await getFollowers(cursor)
 
@@ -128,6 +132,7 @@ const getDefectorsFromDB = async() => {
 }
 
 module.exports = {
+  triviaFlash,
   cheerFlash,
   subscriberFlash,
   followerFlash,

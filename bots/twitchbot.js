@@ -46,6 +46,7 @@ client.on('chat', async (channel, userstate, message, self) => {
   if (trivia.isPlaying()) {
     if (trivia.isAnswer(message)) {
       await client.say(channel, 'CORRECT!')
+      await api.triviaFlash()
     }
   }
 
