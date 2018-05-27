@@ -84,6 +84,6 @@ client.on('chat', async (channel, userstate, message, self) => {
   } else if (message === '!discord') {
     await client.say(channel, 'https://discord.gg/kGYNaVQ')
   } else if (message === '!help') {
-    await client.say(channel, 'Use !defectors to list the defectors')
+    await client.say(channel, 'Use !defectors, !discord, !trivia')
   }
 })
