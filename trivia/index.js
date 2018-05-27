@@ -29,6 +29,7 @@ const getQuestion = async () => {
 }
 
 const isAnswer = answer => {
+  console.log('answer to check is', state.CURRENT_QUESTION.answer)
   if (answer.toLowerCase() === state.CURRENT_QUESTION.answer.toLowerCase()) {
     state.IS_PLAYING = false
     clearTimeout(state.TIMEOUT)
