@@ -1,5 +1,5 @@
 const axios = require('axios')
-
+const logger = require('../logger')
 const API_URL = 'http://jservice.io'
 
 let state = {
