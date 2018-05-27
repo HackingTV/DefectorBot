@@ -15,7 +15,7 @@ const getRandomQuestionAPI = () => (
 
 const getQuestion = async () => {
   let question = await getRandomQuestionAPI()
-  question.answer = (question.answer).replace(/[\W_]+/g,'')
+  question.answer = (question.answer).replace(/[^a-zA-Z\d\s]/g,'')
 
   state.CURRENT_QUESTION = question
   state.IS_PLAYING = true

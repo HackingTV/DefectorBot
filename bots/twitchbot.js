@@ -41,6 +41,8 @@ client.on('chat', async (channel, userstate, message, self) => {
   // Don't listen to my own messages..
   if (self) return
 
+  console.log('trivia playing', trivia.isPlaying())
+
   if (trivia.isPlaying()) {
     if (trivia.isAnswer(message)) {
       await client.say(channel, 'CORRECT!')
@@ -63,6 +65,8 @@ client.on('chat', async (channel, userstate, message, self) => {
     //return client.say(channel, 'Starting a game of trivia!')
     let question = await trivia.getQuestion()
     await client.say(channel, question)
+  } else if (message === '!discord') {
+    await client.say(channel, 'https://discord.gg/kGYNaVQ')
   } else if (message === '!help') {
     await client.say(channel, 'Use !defectors to list the defectors')
   }
