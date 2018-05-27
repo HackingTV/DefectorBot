@@ -1,5 +1,6 @@
 const axios = require('axios')
 const logger = require('../logger')
+const striptags = require('striptags');
 const API_URL = 'http://jservice.io'
 
 let state = {
@@ -15,7 +16,7 @@ const getRandomQuestionAPI = () => (
 
 const getQuestion = async () => {
   let question = await getRandomQuestionAPI()
-  question.answer = (question.answer).replace(/[^a-zA-Z\d\s]/g,'')
+  question.answer = (striptags(question.answer)).replace(/[^a-zA-Z\d\s]/g,'')
 
   state.CURRENT_QUESTION = question
   state.IS_PLAYING = true
