@@ -41,7 +41,7 @@ client.on('chat', async (channel, userstate, message, self) => {
   // Don't listen to my own messages..
   if (self) return
 
-  console.log('trivia playing', trivia.isPlaying())
+  logger.info('trivia playing', trivia.isPlaying())
 
   if (trivia.isPlaying()) {
     if (trivia.isAnswer(message)) {
