@@ -48,6 +48,8 @@ client.on('chat', async (channel, userstate, message, self) => {
       await client.say(channel, 'CORRECT!')
       await api.triviaFlash()
     }
+  } else {
+    await client.say(channel, 'A game of trivia is already in progress.')
   }
 
   if(message === '!defectors') {
