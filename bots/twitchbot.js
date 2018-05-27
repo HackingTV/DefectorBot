@@ -33,6 +33,17 @@ client.on('subscription', handleSubscription)
 
 client.on('subgift', handleSubscription)
 
+client.on('resub', function(
+  channel,
+  username,
+  months,
+  message,
+  userstate,
+  methods,
+) {
+  handleSubscription(channel, username, null, message, userstate)
+})
+
 client.on('cheer', async (channel, userstate, message) => {
   await api.cheerFlash(userstate.bits)
 })
@@ -61,6 +72,8 @@ client.on('chat', async (channel, userstate, message, self) => {
       console.error(err)
       logger.error(err)
     }
+  } else if (message === '!sr') {
+    //TODO: implement song request functionality
   } else if (message === '!trivia') {
     if (trivia.isPlaying()) {
       return await client.say(channel, 'A game of trivia is already in progress.')
