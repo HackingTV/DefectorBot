@@ -7,42 +7,30 @@
 <script>
   $(function () {
     var socket = io();
-    socket.on('subscribe', handleSubscribe)
-    socket.on('follow', handleFollow);
+    socket.on('alert', handleAlert)
   });
 
-  var handleSubscribe = function(username) {
-      var audio = $('#subscriber-audio')[0];
-      audio.play();
-      $('div#subscriber-alert h1').text(username + ' has subscribed!')
-      $('div#subscriber-alert').show().delay(8000).hide(0)
-  }
+  var handleAlert = function(alertObject) {
+    console.log(alertObject);
+    var audio = $('audio')[0];
+    audio.src = alertObject.sound;
+    audio.play();
 
-  var handleFollow = function(username) {
-      var audio = $('#follower-audio')[0];
-      audio.play();
-      $('div#follower-alert h1').text(username + ' has followed!')
-      $('div#follower-alert').show().delay(8000).hide(0)
+    $('img').attr('src', alertObject.gif);
+
+    $('#alert h1').text(alertObject.text);
+    $('#alert').show().delay(8000).hide(0);
   }
 </script>
 
 <body>
 
-<div id="subscriber-alert" style="text-align:center; display:none;">
-  <audio id="subscriber-audio">
-    <source type="audio/mpeg" src="/static/sounds/hackertheme.mp3"/>
+<div id="alert">
+  <audio>
+    <source type="audio/mpeg" />
   </audio>
-  <img style="width:300px" src="/static/images/realhacker.gif"/>
+  <img id="animation-gif" />
   <h1 id="title"></h1>
 </div>
-
-<div id="follower-alert" style="text-align:center; display:none;">
-  <audio id="follower-audio">
-    <source type="audio/mpeg" src="/static/sounds/dotmatrix.mp3"/>
-  </audio>
-  <img style="width:300px" src="/static/images/hacker.gif"/>
-  <h1 id="title"></h1>
-</div>
-
 </body>
 </html>

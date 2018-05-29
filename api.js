@@ -49,6 +49,24 @@ const getFollowers = (cursor) => {
   .catch(err => console.log(err))
 }
 
+const createAlertObject = (alert) => {
+  if (alert.type === 'follow') {
+    alert.text = `${alert.name} has followed!`
+    alert.sound = '/static/sounds/dotmatrix.mp3'
+    alert.gif = '/static/images/hacker.gif'
+  } else if (alert.type === 'subscribe') {
+    alert.text = `${alert.name} has subscribed!`
+    alert.sound = '/static/sounds/hackertheme.mp3' 
+    alert.gif = '/static/images/realhacker.gif'
+  } else if (alert.type === 'cheer') {
+    alert.text = `${alert.name} has cheered with ${alert.amount} bits!`
+    alert.sound = '/static/sounds/cheer.mp3' 
+    alert.gif = '/static/images/cheer.gif'
+  }
+
+  return alert
+}
+
 const subscriberFlash = () => {
   return axios.get(process.env.LIGHT_API + '/subscriber')
 }
@@ -132,6 +150,7 @@ const getDefectorsFromDB = async() => {
 }
 
 module.exports = {
+  createAlertObject,
   triviaFlash,
   cheerFlash,
   subscriberFlash,

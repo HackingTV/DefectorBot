@@ -23,7 +23,8 @@ const handleSubscription = async (channel, username, method, message, userstate)
   console.log(`subscription detected, firing lights ${username}`)
   logger.info(`subscription detected, firing lights ${username}`)
   await api.subscriberFlash()
-  io.emit('subscribe', username)
+  io.emit('alert', api.createAlertObject({ type: 'subscribe', name: username }))
+
 }
 
 // Connect the client to the server..
@@ -46,6 +47,7 @@ client.on('resub', function(
 
 client.on('cheer', async (channel, userstate, message) => {
   await api.cheerFlash(userstate.bits)
+  io.emit('alert', api.createAlertObject({ type: 'cheer', name: userstate['display-name'], amount: userstate.bits}))
 })
 
 client.on('chat', async (channel, userstate, message, self) => {

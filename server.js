@@ -46,7 +46,7 @@ app.post('/follower/callback', async (req, res) => {
     logger.info(`Saving user to database Followers table ${JSON.stringify(userToSave[0])}`)
     await api.followerFlash()
     logger.info('fired lights!')
-    io.emit('follow', userToSave[0].username)
+    io.emit('alert', api.createAlertObject({ type: 'follow', name: userToSave[0].username }))
     logger.info('fired widget!')
     res.send(req.body)
   } catch (err) {
@@ -73,8 +73,14 @@ app.get('/defectors', async (req, res) => {
 //   res.sendStatus(200)
 // })
 
-// app.get('/testSubscribe/:name', (req, res) => {
-//   io.emit('subscribe', req.params.name)
+// app.get('/test/:type/:name/:amount?', (req, res) => {
+//   let type = req.params.type
+//   let name = req.params.name
+//   let amount = req.params.amount
+
+//   let alert = { type, name, amount }
+
+//   io.emit('alert', api.createAlertObject(alert))
 //   res.sendStatus(200)
 // })
 
