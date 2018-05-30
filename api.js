@@ -156,6 +156,7 @@ const getDefectorsFromDB = async() => {
 }
 
 module.exports = {
+  songSkip,
   songRequest,
   createAlertObject,
   triviaFlash,
