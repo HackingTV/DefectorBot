@@ -5,6 +5,7 @@ const io = require('../server').io
 const trivia = require('../trivia')
 
 const channel = 'hackingtv'
+const username = 'hackingtv'
 
 const options = {
     connection: {
@@ -77,8 +78,12 @@ client.on('chat', async (channel, userstate, message, self) => {
   } else if (message === '!github') {
     await client.say(channel, 'https://github.com/HackingTV')
   } else if (message.startsWith('!sr')) {
-    let youtubeUrl = message.split(' ')[1].join(' ').trim()
+    console.log(message)
+    let youtubeUrl = message.split(' ').slice(1).join(' ').trim()
+    console.log('search terms', youtubeUrl)
     await api.songRequest(youtubeUrl)
+  } else if (message === '!skip' && userstate.username === username) {
+    await api.songSkip()
   } else if (message === '!trivia') {
     if (trivia.isPlaying()) {
       return await client.say(channel, 'A game of trivia is already in progress.')

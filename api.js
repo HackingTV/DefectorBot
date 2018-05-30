@@ -71,6 +71,8 @@ const songRequest = (url) => {
   return axios.post(process.env.LIGHT_API + '/song', { url })
 }
 
+const songSkip = () => axios.get(process.env.LIGHT_API + '/song/skip')
+
 const subscriberFlash = () => {
   return axios.get(process.env.LIGHT_API + '/subscriber')
 }
