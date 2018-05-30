@@ -24,8 +24,8 @@ const handleSubscription = async (channel, username, method, message, userstate)
   logger.info(`subscription detected, firing lights ${username}`)
   await api.subscriberFlash()
   io.emit('alert', api.createAlertObject({ type: 'subscribe', name: username }))
-
 }
+
 
 // Connect the client to the server..
 client.connect()
@@ -74,8 +74,11 @@ client.on('chat', async (channel, userstate, message, self) => {
       console.error(err)
       logger.error(err)
     }
-  } else if (message === '!sr') {
-    //TODO: implement song request functionality
+  } else if (message === '!github') {
+    await client.say(channel, 'https://github.com/HackingTV')
+  } else if (message.startsWith('!sr')) {
+    let youtubeUrl = message.split(' ')[1].join(' ').trim()
+    await api.songRequest(youtubeUrl)
   } else if (message === '!trivia') {
     if (trivia.isPlaying()) {
       return await client.say(channel, 'A game of trivia is already in progress.')

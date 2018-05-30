@@ -67,6 +67,10 @@ const createAlertObject = (alert) => {
   return alert
 }
 
+const songRequest = (url) => {
+  return axios.post(process.env.LIGHT_API + '/song', { url })
+}
+
 const subscriberFlash = () => {
   return axios.get(process.env.LIGHT_API + '/subscriber')
 }
@@ -150,6 +154,7 @@ const getDefectorsFromDB = async() => {
 }
 
 module.exports = {
+  songRequest,
   createAlertObject,
   triviaFlash,
   cheerFlash,
