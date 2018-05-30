@@ -82,7 +82,8 @@ client.on('chat', async (channel, userstate, message, self) => {
     let youtubeUrl = message.split(' ').slice(1).join(' ').trim()
     console.log('search terms', youtubeUrl)
     await api.songRequest(youtubeUrl)
-  } else if (message === '!skip' && userstate.username === username) {
+  } else if (message === '!skip') { //&& userstate.username === username) {
+    console.log(userstate)
     await api.songSkip()
   } else if (message === '!trivia') {
     if (trivia.isPlaying()) {
